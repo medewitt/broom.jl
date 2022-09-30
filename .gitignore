@@ -1,0 +1,15 @@
+.jl.*.cov
+*.jl.cov
+*.jl.mem
+**/Manifest.toml
+
+# Generated files.
+/docs/build/
+/docs/src/tutorials/*.html
+/docs/src/tutorials/*.md
+
+.vscode/
+.DS_Store
+
+# Temp copies for notebooks.
+**/_tmp_**
