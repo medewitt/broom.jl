@@ -1,0 +1,62 @@
+# From https://raw.githubusercontent.com/TuringLang/TuringGLM.jl/main/.github/workflows/CI.yml
+name: CI
+on:
+  push:
+    branches:
+      - main
+    tags: '*'
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: only if it is a pull request build.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  test:
+    name: Julia CI
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    continue-on-error: ${{ matrix.version == 'nightly' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - '1.6'
+          - '1.8'
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macOS-latest
+        arch:
+          - x64
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: ${{ matrix.version }}
+          arch: ${{ matrix.arch }}
+      - uses: julia-actions/cache@v1
+      - uses: julia-actions/julia-buildpkg@v1
+      - uses: julia-actions/julia-runtest@v1
+        with:
+          coverage: 'false'
+        env:
+          JULIA_NUM_THREADS: '2'
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: '1.8'
+      - uses: julia-actions/cache@v1
+      - uses: julia-actions/julia-buildpkg@v1
+      - run: julia --project=docs -e '
+          using Pkg; Pkg.develop(path=".");
+          include("docs/make.jl")'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}

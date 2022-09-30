@@ -1,0 +1,10 @@
+name = "broom"
+uuid = "91f9ba70-6d4f-43a4-9295-3bfbe17bc09b"
+authors = ["Michael DeWitt <me.dewitt.jr@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
+MixedModels = "ff71e718-51f3-5ec2-a782-8ffcbfa3c316"
+TuringGLM = "0004c1f4-53c5-4d43-a221-a1dac6cf6b74"
